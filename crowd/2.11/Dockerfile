@@ -1,14 +1,14 @@
-FROM openjdk:8-jdk-alpine
+FROM tommylau/java:1.8
 
 MAINTAINER Tommy Lau <tommy@gen-new.com>
 
 # Setup useful environment variables
 ENV CROWD_HOME		/var/atlassian/application-data/crowd
 ENV CROWD_INSTALL	/opt/atlassian/crowd
-ENV CROWD_VERSION	3.1.2
+ENV CROWD_VERSION	2.11.2
 ENV DOWNLOAD_URL	https://www.atlassian.com/software/crowd/downloads/binary/atlassian-crowd-${CROWD_VERSION}.tar.gz
 
-LABEL Description="This image is used to start Atlassian Crowd" Vendor="Tommy Lau" Version="${CROWD_VERSION}"
+LABEL Description="This image is used to start Atlassian Crowd" Vendor="Tommy Lau" Version="${BITBUCKET_VERSION}"
 
 # Use the default unprivileged account. This could be considered bad practice
 # on systems where multiple processes end up being executed by 'daemon' but
@@ -18,8 +18,6 @@ ENV RUN_GROUP           daemon
 
 # Install Atlassian Crowd to the following location
 RUN set -x \
-    && apk add --update ca-certificates curl tar tomcat-native \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/* \
     && mkdir -p                           "${CROWD_HOME}" \
     && chmod -R 700                       "${CROWD_HOME}" \
     && chown ${RUN_USER}:${RUN_GROUP}     "${CROWD_HOME}" \
